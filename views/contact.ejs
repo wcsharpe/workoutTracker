@@ -1,0 +1,54 @@
+<%- include('layouts/header.ejs') %>
+
+  
+  <!-- Contact form -->
+  <br>
+  <div class="container mb-4">
+    <div class="row">
+      <div class="col-5">
+        <form action="/submitContact" method="post">
+          <h1 class="text-warning">Contact</h1>
+          <div class="mb-3 row">
+            <label for="fname" class="col-sm-3 col-form-label">First name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="fname" placeholder="First Name">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="lname" class="col-sm-3 col-form-label">Last Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="lname" placeholder="Last Name">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="email" class="col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="email" placeholder="Email">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="comment" class="form-label">Comments</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" name="comment" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="urgency">Level of urgency</label>
+            <div class="col-sm-10">
+              <select name="urgency" class="form-control">
+                <option selected>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- end Contact form -->
+
+  <%- include('layouts/footer.ejs') %>  
