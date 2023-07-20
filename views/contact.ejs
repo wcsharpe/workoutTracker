@@ -3,11 +3,12 @@
   
   <!-- Contact form -->
   <br>
-  <div class="container mb-4">
-    <div class="row">
-      <div class="col-5">
+  <div class="container d-flex justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card bg-white">
+        <div class="card-body p-8">
         <form action="/submitContact" method="post">
-          <h1 class="text-warning">Contact</h1>
+          <h1 class="text-primary">Contact</h1>
           <div class="mb-3 row">
             <label for="fname" class="col-sm-3 col-form-label">First name</label>
             <div class="col-sm-10">
@@ -49,6 +50,7 @@
       </div>
     </div>
   </div>
+</div>
   <!-- end Contact form -->
 
   <%- include('layouts/footer.ejs') %>  

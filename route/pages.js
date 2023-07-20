@@ -13,8 +13,12 @@ router.get('/contact', (req,res)=>{
   res.render('contact', {title: 'contact'});
 });
 
-router.get('/workoutLog', (req,res)=>{
-  res.render('workoutLog', {title: 'workoutLog'});
+router.get('/randomWorkout', (req,res)=>{
+  res.render('randomWorkout', {title: 'randomWorkout'});
+});
+
+router.get('/register', (req,res)=>{
+  res.render('register', {title: 'register'});
 });
 
 router.post('/submitContact',(req,res)=>{

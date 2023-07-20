@@ -14,7 +14,7 @@
 
 <body>
   <!-- navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-2 border-bottom border-width">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary border-2 border-bottom border-width">
     <div class="container-fluid">
       <a class="navbar-brand text-warning"><img src="/Workout Tracker.png" alt="logo" width="95" height="95"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -31,39 +31,18 @@
             <% } %>
           </li>
           <li class="nav-item">
-            <% if (title === "experience") { %>
-              <a class="nav-link active" aria-current="page" href="/experience">Experience</a>
+            <% if (title === "randomWorkout") { %>
+              <a class="nav-link active" aria-current="page" href="/randomWorkout">Random Workout</a>
             <% } else { %>
-              <a class="nav-link" href="/experience">Experience</a>
+              <a class="nav-link" href="/randomWorkout">Random Workout</a>
             <% } %>
           </li>
           <li class="nav-item">
-            <% if (title === "education") { %>
-              <a class="nav-link active" aria-current="page" href="/education">Education</a>
-            <% } else { %>
-              <a class="nav-link" href="/education">Education</a>
-            <% } %>
-          </li>
-          <li class="nav-item">
-            <% if (title === "projects") { %>
-              <a class="nav-link active" aria-current="page" href="/projects">Projects</a>
-            <% } else { %>
-              <a class="nav-link" href="/projects">Projects</a>
-            <% } %>
-          </li>
-          <li class="nav-item dropdown">
             <% if (title === "contact") { %>
-              <a class="nav-link dropdown-toggle active" aria-current="page" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Contact
-              </a>
+              <a class="nav-link active" aria-current="page" href="/contact">Contact</a>
             <% } else { %>
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Contact
-              </a>
+              <a class="nav-link" href="/contact">Contact</a>
             <% } %>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/contact">Contact</a></li>
-            </ul>
           </li>
         </ul>
       </div>
