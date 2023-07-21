@@ -36,19 +36,37 @@ router.post('/submitContact',(req,res)=>{
   .catch(err => console.log(err));
 });
 
-router.post('/createUser',(req,res)=>{
+router.post('/createUsers',(req,res)=>{
   const users = new Users({
-    fname: req.body.fname,
-    lname: req.body.lname,
     email: req.body.email,
-    weight: req.body.weight,
-    height: req.body.height
+    password: req.body.password,
+    weight: req.body.weight
   });
   Users.collection.insertOne(users)
   .then(result =>{
     res.render('workoutLog',{title: 'workoutLog'});
   })
   .catch(err => console.log(err));
+});
+
+router.post('/loginUser',async (req,res)=>{
+  try {
+    //check if user exists
+    const user = await Users.findOne({ email: req.body.email });
+    if(user) {
+      //check if pw matches
+      const result = req.body.password === user.password;
+      if(result){
+        res.render('workoutLog');
+      } else {
+        res.status(400).json({ error: "password doesn't match"});
+      }
+    } else {
+      res.status(400).json({ error: "User doesn't exist"});
+    }
+  } catch (error) {
+    res.status(400).json({error});
+  }
 });
 
 module.exports = router;

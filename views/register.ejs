@@ -7,28 +7,30 @@
   <div class="col-12 col-md-8 col-lg-6">
     <div class="card bg-white">
       <div class="card-body p-8">
-        <form>
+        <form action="/createUsers" method="post">
           <h2 class="text-primary">Register</h2>
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <label class="form-label" for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Email"/>
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" name="email" placeholder="Email"/>
           </div>
           
           <!-- Password input -->
           <div class="form-outline mb-4">
-            <label class="form-label" for="password">Password</label>
-            <input type="password" id="password" class="form-control" placeholder="Password"/>
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Password"/>
           </div>
 
           <!-- Weight (lbs) input -->
           <div class="form-outline mb-4">
-            <label class="form-label" for="weight">Weight (lbs)</label>
-            <input type="weight" id="weight" class="form-control" placeholder="Weight in Pounds"/>
+            <label for="weight" class="form-label">Weight (lbs)</label>
+            <input type="text" name="weight" class="form-control" placeholder="Weight in Pounds"/>
           </div>
 
           <!-- Register button -->
-          <button type="button" class="btn btn-primary btn-block mb-4">Register</button>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Register</button>
+          </div>
         </form>
       </div>
     </div>

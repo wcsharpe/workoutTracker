@@ -1,8 +1,76 @@
 body{
-  background-color: rgb(243, 239, 239);
   background-color: rgb(215, 209, 209);
   background-image: url('/background.jpg');
 }
 footer{
   background-color: white;
+}
+#img-source{
+  font-size: 9px;
+}
+.tracker {
+  border-collapse: collapse;
+}
+.tracker,
+tracker * {
+  font-family: sans-serif;
+}
+.tracker th {
+  font-size: 1.15em;
+  text-align: left;
+  font-weight: normal;
+  color: white;
+  background: #344A62;
+}
+.tracker th,
+.tracker td {
+  padding: .75em;
+}
+
+.tracker_entries .tracker_row {
+  background: #eeeeee;
+}
+.tracker_entries .tracker_row:nth-child(odd) {
+  background: #dddddd;
+}
+.tracker_date,
+.tracker_duration,
+.tracker_intensity,
+.tracker_workout,
+.tracker_cal {
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: 1em;
+  height: 2.5em;
+  padding: .5em 0;
+  border: none;
+  outline: none;
+  background: none;
+}
+.tracker_duration{
+  width: 5em;
+  text-align: right;
+}
+.tracker_delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  outline: none;
+  color: red;
+  font-size: 1.5em;
+  margin-left: .5em;
+  cursor: pointer;
+}
+.tracker_delete:hover{
+  color: rgb(86, 25, 25);
+}
+.tracker_add{
+  border: none;
+  outline: none;
+  background: none;
+}
+.tracker_add:hover{
+  background: rgba(0,0,0,0.1);
 }
