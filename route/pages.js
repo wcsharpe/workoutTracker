@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('./models/contact');
 const Users = require('./models/users');
+const notifier = require('node-notifier');
 
 router.get('/', (req,res)=>{
   res.render('index', {title: 'index'});
@@ -51,22 +52,33 @@ router.post('/createUsers',(req,res)=>{
 
 router.post('/loginUser',async (req,res)=>{
   try {
-    //check if user exists
-    const user = await Users.findOne({ email: req.body.email });
-    if(user) {
-      //check if pw matches
-      const result = req.body.password === user.password;
-      if(result){
-        res.render('workoutLog');
+      // check if the user exists
+      const user = await Users.collection.findOne({ email: req.body.email });
+      if (user) {
+        //check if password matches
+        const result = req.body.password === user.password;
+        if (result) {
+          res.render('workoutLog',{title: 'workoutLog'});
+        } else {
+          // res.status(400).json({ error: "password doesn't match" });
+          notifier.notify({
+            title: 'Workout Tracker',
+            message: 'Invalid password and/or user!',
+            sound: true
+          });
+        }
       } else {
-        res.status(400).json({ error: "password doesn't match"});
+        // res.status(400).json({ error: "User doesn't exist" });
+        notifier.notify({
+          title: 'Workout Tracker',
+          message: 'Invalid password and/or user!',
+          sound: true
+        });
       }
-    } else {
-      res.status(400).json({ error: "User doesn't exist"});
+    } catch (error) {
+      res.status(400).json({ error });
+      console.log(error);
     }
-  } catch (error) {
-    res.status(400).json({error});
-  }
 });
 
 module.exports = router;
