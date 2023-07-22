@@ -8,6 +8,10 @@ footer{
 #img-source{
   font-size: 9px;
 }
+.welcomeUser {
+  color: #344A62;
+  font-family: sans-serif;
+}
 .tracker {
   border-collapse: collapse;
 }

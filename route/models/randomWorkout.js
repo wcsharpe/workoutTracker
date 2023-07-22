@@ -1,19 +1,31 @@
 const mongoose = require('mongoose');
 
 var randomWorkoutSchema = new mongoose.Schema({
-  fname: {
+  idNum: {
+    type: Number
+  },
+  img: {
     type: String
   },
-  lname: {
+  workoutName: {
     type: String
   },
-  email: {
+  instruction1: {
     type: String
   },
-  comment: {
+  instruction2: {
     type: String
   },
-  urgency: {
+  instruction3: {
+    type: String
+  },
+  instruction4: {
+    type: String
+  },
+  instruction5: {
+    type: String
+  },
+  instruction6: {
     type: String
   }
 });

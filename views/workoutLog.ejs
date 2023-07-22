@@ -2,6 +2,15 @@
 
 <br>
 <br>
+<!-- Nonesense -->
+<div class="container d-flex justify-content-center p-2">
+  <div class="card bg-white">
+    <div class="card-body p-8">
+<h3 class="welcomeUser">Welcome <%- user.email %>!</h3>
+  </div>
+  </div>
+</div>
+<!-- end of nonsense -->
 <!-- Begin table -->
 <div class="container d-flex justify-content-center">
   <!-- <div class="col-12 col-md-8 col-lg-6"> -->
@@ -22,7 +31,7 @@
           <tbody class="tracker_entries">
             <tr class="tracker_row">
               <td>
-                <input type="date" class="tracker_date">
+                <input type="date" class="tracker_date" name="tracker_date">
               </td>
               <td>
                 <select class="tracker_workout">
@@ -40,18 +49,18 @@
                 </select>
               </td>
               <td>
-                <input type="number" class="tracker_duration">
+                <input type="number" class="tracker_duration" name="tracker_duration">
                 <span class="tracker_text">minutes</span>
               </td>
               <td>
-                <select class="tracker_intensity">
+                <select class="tracker_intensity" name="tracker_intensity">
                   <option value="light">Light</option>
                   <option value="moderate">Moderate</option>
                   <option value="heavy">Heavy</option>
                 </select>
               </td>
               <td>
-                <input type="text" class="tracker_cal" placeholder="Estimated" readonly></input>
+                <input type="text" class="tracker_cal" placeholder="Estimated" name="tracker_cal" readonly></input>
               </td>
               <td>
                 <button type="button" class="tracker_delete">&times;</button>
