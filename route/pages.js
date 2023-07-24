@@ -2,42 +2,83 @@
 const express = require('express');
 const router = express.Router();
 
+
+// required models
 const Contact = require('./models/contact');
 const Users = require('./models/users');
 const RandomWorkout = require('./models/randomWorkout');
 
+// for notifing user of incorrect login info
 const notifier = require('node-notifier');
 
+// get home page
 router.get('/', (req,res)=>{
   res.render('index', {title: 'index'});
 });
 
-//////////////////////////////////////////////////
-router.get('/workoutLog', async (req,res, user)=>{
+// get workout log page with workout history //////////////////////////
+router.get('/workoutLog', async (req,res)=>{
   try {
+
     res.render('workoutLog', {title: 'workoutLog', user});
   } catch (error) {
     console.log(error);
   }
 });
 //////////////////////////////////////////////////
+// add a workout to history
+router.post('/addWorkout', async (req,res, user)=>{
+  try{
+    const query = user.email;
+    const user = Users.collection.findOne(query);
+    user.workouts.insertMany({},{ $push:
+      {
+        tracker_date: req.body.tracker_date,
+        tracker_duration: req.body.tracker_duration,
+        tracker_intensity: req.body.tracker_intensity,
+        tracker_cal: req.body.tracker_cal,
+      }
+  });
+    res.render('workoutLog', {title: 'workoutLog'});
+  } catch(error) {
+    console.log(error);
+  }
+});
+//////////////////////////////////////////////////
 
-// router.post('/addWorkout', async (req,res, user)=>{
-//   try{
-//     const query = user.email;
-//     Users.collection.findOne(query);
-//     res.render('workoutLog', {title: 'workoutLog', user});
-//   } catch(error) {
+// router.post('/adjustWeight', async (req,res) =>{
+//   try {
+//     const filter = {email: req.body.email};
+//     const update = {weight: parseInt(req.body.weight)};
+//     const user = await Users.collection.findOneAndUpdate(filter,{$set:update},{new:true});
+//     res.render('workoutLog',{title: 'workoutLog', user});  
+//   } catch (error) {
+//     res.status(400).json({ error });
 //     console.log(error);
 //   }
 // });
-//////////////////////////////////////////////////
+
+router.post('/adjustWeight', async (req,res) =>{
+  try {
+    const filter = {email: req.body.email};
+    const update = {weight: parseInt(req.body.weight)};
+    await Users.collection.findOneAndUpdate(filter,{$set:update},{new:true});
+    const user = await Users.collection.findOne(filter);
+    res.render('workoutLog',{title: 'workoutLog', user});  
+  } catch (error) {
+    res.status(400).json({ error });
+    console.log(error);
+  }
+});
 
 
+
+// get contact page
 router.get('/contact', (req,res)=>{
   res.render('contact', {title: 'contact'});
 });
 
+// get random workout page with a different workout each time loads
 router.get('/randomWorkout', async (req,res)=>{
   try {
     var max = 7; 
@@ -50,10 +91,12 @@ router.get('/randomWorkout', async (req,res)=>{
   }
 });
 
+// registration page
 router.get('/register', (req,res)=>{
   res.render('register', {title: 'register'});
 });
 
+// post contact info to database
 router.post('/submitContact',(req,res)=>{
   const contact = new Contact({
     fname: req.body.fname,
@@ -69,6 +112,7 @@ router.post('/submitContact',(req,res)=>{
   .catch(err => console.log(err));
 });
 
+// create a new user and store in database
 router.post('/createUsers',(req,res)=>{
   const user = new Users({
     email: req.body.email,
@@ -82,6 +126,7 @@ router.post('/createUsers',(req,res)=>{
   .catch(err => console.log(err));
 });
 
+// login process
 router.post('/loginUser', async (req,res)=>{
   try {
       // check if the user exists

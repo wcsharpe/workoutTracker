@@ -70,7 +70,7 @@
           <tbody>
             <tr class="tracker_row tracker_row_add">
               <td colspan="6">
-                <button type="button" class="tracker_add">Add Entry &plus;</span>
+                <button type="submit" formaction="/addWorkout" class="tracker_add">Add Entry &plus;</span>
               </td>
             </tr>
           </tbody>
@@ -86,16 +86,16 @@
   <div class="col-4">
     <div class="card bg-white">
       <div class="card-body p-8">
-        <form>
+        <form action="/adjustWeight" method="post">
           <h5 class="text-primary">Weight Adjustment</h5>
-          <!-- Email input -->
+          <!-- Weight input -->
           <div class="form-outline mb-4">
-            <label class="form-label" for="weight">Weight In Pounds</label>
-            <input type="text" class="form-control" id="email" placeholder="Weight in lbs"/>
+            <label for="weight" class="form-label">Currently set to: <%- user.weight %>lbs</label>
+            <input type="number" class="form-control" name="weight" placeholder="Weight in lbs"/>
+            <input type="hidden" name="email" value="<%- user.email %>"/>
           </div>
-      
           <!-- Submit button -->
-          <button type="button" class="btn btn-primary btn-block mb-4">Change Weight</button>
+          <button type="submit" class="btn btn-primary btn-block mb-4">Change Weight</button>
         </form>
       </div>
     </div>
