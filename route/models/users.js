@@ -16,6 +16,7 @@ var usersSchema = new mongoose.Schema({
   workouts: [
     {
       tracker_date: Date,
+      tracker_workout_type: String,
       tracker_duration: Number,
       tracker_intensity: String,
       tracker_cal: Number

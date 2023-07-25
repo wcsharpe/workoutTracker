@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 // required models
 const Contact = require('./models/contact');
 const Users = require('./models/users');
@@ -20,43 +19,80 @@ router.get('/', (req,res)=>{
 router.get('/workoutLog', async (req,res)=>{
   try {
 
-    res.render('workoutLog', {title: 'workoutLog', user});
+    res.render('workoutLog', {title: 'workoutLog'});
   } catch (error) {
     console.log(error);
   }
 });
-//////////////////////////////////////////////////
+
 // add a workout to history
-router.post('/addWorkout', async (req,res, user)=>{
+router.post('/addWorkout', async (req,res)=>{
   try{
-    const query = user.email;
-    const user = Users.collection.findOne(query);
-    user.workouts.insertMany({},{ $push:
-      {
-        tracker_date: req.body.tracker_date,
-        tracker_duration: req.body.tracker_duration,
-        tracker_intensity: req.body.tracker_intensity,
-        tracker_cal: req.body.tracker_cal,
+    const filter = {email: req.body.email};
+
+    const user = await Users.collection.findOne(filter);
+
+    // take all input and find the cals burned
+    function caloriesBurned() {
+      var weight = user.weight;
+      var workoutType = req.body.tracker_workout_type;
+      var workoutIntensity = req.body.tracker_intensity;
+      var duration = parseInt(req.body.tracker_duration);
+
+      switch(workoutIntensity){
+        case 'light':
+          intensityScore = 1;
+        case 'moderate':
+          intensityScore = 1.20;
+        case 'heavy':
+          intensityScore = 1.50;
       }
-  });
-    res.render('workoutLog', {title: 'workoutLog'});
+      switch(workoutType){
+        case 'walking':
+          workoutScore = 2;
+        case 'jogging':
+          workoutScore = 5;
+        case 'hiking':
+          workoutScore = 3.5;
+        case 'running':
+          workoutScore = 8;
+        case 'swimming':
+          workoutScore = 5;
+        case 'cycling':
+          workoutScore = 4;
+        case 'weights':
+          workoutScore = 4;
+        case 'calisthenics':
+          workoutScore = 5;
+        case 'crossfit':
+          workoutScore = 5;
+        case 'yoga':
+          workoutScore = 2.5;
+        case 'pilates':
+          workoutScore = 3;
+      }
+      var calsBurned = weight * workoutScore * intensityScore * (duration/60)/2.2 
+      return parseInt(calsBurned);
+    }
+    // let cals = caloriesBurned(weight, workoutType, workoutIntensity,duration);
+    let cals = caloriesBurned();
+    Users.collection.findOneAndUpdate(filter,{ $push:{
+      'workouts': {
+        tracker_date: Date.parse(req.body.tracker_date),
+        tracker_workout_type: req.body.tracker_workout_type,
+        tracker_duration: parseInt(req.body.tracker_duration),
+        tracker_intensity: req.body.tracker_intensity,
+        tracker_cal: cals
+      }
+    }}, {new:true}
+  );
+    res.render('workoutLog', {title: 'workoutLog',user});
   } catch(error) {
     console.log(error);
   }
 });
 //////////////////////////////////////////////////
 
-// router.post('/adjustWeight', async (req,res) =>{
-//   try {
-//     const filter = {email: req.body.email};
-//     const update = {weight: parseInt(req.body.weight)};
-//     const user = await Users.collection.findOneAndUpdate(filter,{$set:update},{new:true});
-//     res.render('workoutLog',{title: 'workoutLog', user});  
-//   } catch (error) {
-//     res.status(400).json({ error });
-//     console.log(error);
-//   }
-// });
 
 router.post('/adjustWeight', async (req,res) =>{
   try {

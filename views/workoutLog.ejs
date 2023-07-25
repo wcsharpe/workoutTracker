@@ -2,7 +2,7 @@
 
 <br>
 <br>
-<!-- Nonesense -->
+<!-- Welcome user with their email -->
 <div class="container d-flex justify-content-center p-2">
   <div class="card bg-white">
     <div class="card-body p-8">
@@ -10,7 +10,7 @@
   </div>
   </div>
 </div>
-<!-- end of nonsense -->
+<!-- end of welcome -->
 <!-- Begin table -->
 <div class="container d-flex justify-content-center">
   <!-- <div class="col-12 col-md-8 col-lg-6"> -->
@@ -18,6 +18,7 @@
       <div class="card-body p-8">
         <div class="table-responsive">
         <table class="table table-striped table-hover align-middle tracker">
+          <form action="/addWorkout" method="post">
           <thead>
             <tr>
               <th>Date</th>
@@ -34,7 +35,7 @@
                 <input type="date" class="tracker_date" name="tracker_date">
               </td>
               <td>
-                <select class="tracker_workout">
+                <select name="tracker_workout_type" class="tracker_workout">
                   <option value="walking">Walking</option>
                   <option value="jogging">Jogging</option>
                   <option value="hiking">Hiking</option>
@@ -70,10 +71,12 @@
           <tbody>
             <tr class="tracker_row tracker_row_add">
               <td colspan="6">
-                <button type="submit" formaction="/addWorkout" class="tracker_add">Add Entry &plus;</span>
+                <input type="hidden" name="email" value="<%- user.email %>"/>
+                <button type="submit" class="tracker_add">Add Entry &plus;</span>
               </td>
             </tr>
           </tbody>
+          </form>
         </table>  
       </div>
     </div>
