@@ -15,10 +15,9 @@ router.get('/', (req,res)=>{
   res.render('index', {title: 'index'});
 });
 
-// get workout log page with workout history //////////////////////////
+// get workoutlog page 
 router.get('/workoutLog', async (req,res)=>{
   try {
-
     res.render('workoutLog', {title: 'workoutLog'});
   } catch (error) {
     console.log(error);
@@ -30,7 +29,7 @@ router.post('/addWorkout', async (req,res)=>{
   try{
     const filter = {email: req.body.email};
 
-    const user = await Users.collection.findOne(filter);
+    var user = await Users.collection.findOne(filter);
 
     // take all input and find the cals burned
     function caloriesBurned() {
@@ -76,9 +75,9 @@ router.post('/addWorkout', async (req,res)=>{
     }
     // let cals = caloriesBurned(weight, workoutType, workoutIntensity,duration);
     let cals = caloriesBurned();
-    Users.collection.findOneAndUpdate(filter,{ $push:{
+    await Users.collection.findOneAndUpdate(filter,{ $push:{
       'workouts': {
-        tracker_date: Date.parse(req.body.tracker_date),
+        tracker_date: req.body.tracker_date,
         tracker_workout_type: req.body.tracker_workout_type,
         tracker_duration: parseInt(req.body.tracker_duration),
         tracker_intensity: req.body.tracker_intensity,
@@ -86,14 +85,41 @@ router.post('/addWorkout', async (req,res)=>{
       }
     }}, {new:true}
   );
+
+    user = await Users.collection.findOne(filter);
     res.render('workoutLog', {title: 'workoutLog',user});
   } catch(error) {
     console.log(error);
   }
 });
-//////////////////////////////////////////////////
 
+// delete a workout
+router.get('/deleteWorkout', async (req,res) =>{
+  try {
+    const filter = { email: req.query.email };
+    const workoutIndexToDelete = parseInt(req.query.index); // Get the index from the query parameter
 
+    console.log(filter);
+    const user = await Users.collection.findOne(filter);
+
+    console.log(user.workouts[workoutIndexToDelete].tracker_cal); // Log the specific tracker_cal value
+    const workoutCals = user.workouts[workoutIndexToDelete].tracker_cal; // Get the specific tracker_cal value
+
+    // Use 'tracker_cal' as the field name inside $pull to delete the matching workout
+    await Users.collection.findOneAndUpdate(
+      filter,
+      { $pull: { workouts: { tracker_cal: workoutCals } } },
+      { new: true }
+    );
+
+    const updatedUser = await Users.collection.findOne(filter);
+    res.render('workoutLog', { title: 'workoutLog', user: updatedUser });
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+// change user weight
 router.post('/adjustWeight', async (req,res) =>{
   try {
     const filter = {email: req.body.email};

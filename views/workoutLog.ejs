@@ -30,23 +30,35 @@
             </tr>
           </thead>
           <tbody class="tracker_entries">
+              <% if(user.workouts != '') { %>
+              <% user.workouts.forEach(function(workout, index) {  %>
+            <tr class="tracker_row">
+              <td><%- workout.tracker_date %></td>
+              <td><%- workout.tracker_workout_type %></td>
+              <td><%- workout.tracker_duration %></td>
+              <td><%- workout.tracker_intensity %></td>
+              <td><%- workout.tracker_cal %></td>
+              <td><a class="text-decoration-none" href="/deleteWorkout?email=<%- user.email %>&index=<%- index %>"><button type="button" class="tracker_delete">&times;</button></a></td>
+            </tr>
+              <% }) %>
+              <% } %>
             <tr class="tracker_row">
               <td>
                 <input type="date" class="tracker_date" name="tracker_date">
               </td>
               <td>
                 <select name="tracker_workout_type" class="tracker_workout">
-                  <option value="walking">Walking</option>
-                  <option value="jogging">Jogging</option>
-                  <option value="hiking">Hiking</option>
-                  <option value="running">Running</option>
-                  <option value="swimming">Swimming</option>
-                  <option value="cycling">Cycling</option>
-                  <option value="weights">Weight Lifting</option>
-                  <option value="calisthenics">Calisthenics</option>
-                  <option value="crossFit">CrossFit</option>
-                  <option value="yoga">Yoga</option>
-                  <option value="pilates">Pilates</option>
+                  <option value="walking">walking</option>
+                  <option value="jogging">jogging</option>
+                  <option value="hiking">hiking</option>
+                  <option value="running">running</option>
+                  <option value="swimming">swimming</option>
+                  <option value="cycling">cycling</option>
+                  <option value="weights">weight lifting</option>
+                  <option value="calisthenics">calisthenics</option>
+                  <option value="crossfit">crossfit</option>
+                  <option value="yoga">yoga</option>
+                  <option value="pilates">pilates</option>
                 </select>
               </td>
               <td>
@@ -55,9 +67,9 @@
               </td>
               <td>
                 <select class="tracker_intensity" name="tracker_intensity">
-                  <option value="light">Light</option>
-                  <option value="moderate">Moderate</option>
-                  <option value="heavy">Heavy</option>
+                  <option value="light">light</option>
+                  <option value="moderate">moderate</option>
+                  <option value="heavy">heavy</option>
                 </select>
               </td>
               <td>
