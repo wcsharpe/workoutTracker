@@ -27,13 +27,14 @@ router.get('/workoutLog', async (req,res)=>{
 // add a workout to history
 router.post('/addWorkout', async (req,res)=>{
   try{
+    // filter to be used in findOne
     const filter = {email: req.body.email};
-
+    // set user to query
     var user = await Users.collection.findOne(filter);
-
-    // take all input and find the cals burned
+    // function to calculate the calories burned
     function caloriesBurned() {
-      var weight = user.weight;
+      
+      var weight = parseInt(user.weight);
       var workoutType = req.body.tracker_workout_type;
       var workoutIntensity = req.body.tracker_intensity;
       var duration = parseInt(req.body.tracker_duration);
@@ -41,40 +42,56 @@ router.post('/addWorkout', async (req,res)=>{
       switch(workoutIntensity){
         case 'light':
           intensityScore = 1;
+          break;
         case 'moderate':
           intensityScore = 1.20;
+          break;
         case 'heavy':
           intensityScore = 1.50;
+          break;
       }
       switch(workoutType){
         case 'walking':
           workoutScore = 2;
+          break;
         case 'jogging':
           workoutScore = 5;
+          break;
         case 'hiking':
           workoutScore = 3.5;
+          break;
         case 'running':
           workoutScore = 8;
+          break;
         case 'swimming':
           workoutScore = 5;
+          break;
         case 'cycling':
           workoutScore = 4;
+          break;
         case 'weights':
           workoutScore = 4;
+          break;
         case 'calisthenics':
           workoutScore = 5;
+          break;
         case 'crossfit':
           workoutScore = 5;
+          break;
         case 'yoga':
           workoutScore = 2.5;
+          break;
         case 'pilates':
           workoutScore = 3;
+          break;
       }
+
       var calsBurned = weight * workoutScore * intensityScore * (duration/60)/2.2 
       return parseInt(calsBurned);
     }
-    // let cals = caloriesBurned(weight, workoutType, workoutIntensity,duration);
+    // call function and set result
     let cals = caloriesBurned();
+    // add new info for workout
     await Users.collection.findOneAndUpdate(filter,{ $push:{
       'workouts': {
         tracker_date: req.body.tracker_date,
@@ -85,7 +102,7 @@ router.post('/addWorkout', async (req,res)=>{
       }
     }}, {new:true}
   );
-
+    // get user again and send updated user along with returning to updated workoutLog page
     user = await Users.collection.findOne(filter);
     res.render('workoutLog', {title: 'workoutLog',user});
   } catch(error) {
@@ -94,30 +111,36 @@ router.post('/addWorkout', async (req,res)=>{
 });
 
 // delete a workout
-router.get('/deleteWorkout', async (req,res) =>{
+router.get('/deleteWorkout', async (req, res) => {
   try {
     const filter = { email: req.query.email };
     const workoutIndexToDelete = parseInt(req.query.index); // Get the index from the query parameter
 
-    console.log(filter);
-    const user = await Users.collection.findOne(filter);
+    const user = await Users.findOne(filter).lean(); // Use lean() to get the plain JavaScript object
 
-    console.log(user.workouts[workoutIndexToDelete].tracker_cal); // Log the specific tracker_cal value
-    const workoutCals = user.workouts[workoutIndexToDelete].tracker_cal; // Get the specific tracker_cal value
+    // Use the array splice method to remove the workout at the specified index
+    if (workoutIndexToDelete >= 0 && workoutIndexToDelete < user.workouts.length) {
+      user.workouts.splice(workoutIndexToDelete, 1);
+      await Users.findOneAndUpdate(filter, { workouts: user.workouts }, { new: true }); // Update workouts array
+    } else {
+      console.log('Invalid workout index.');
+    }
 
-    // Use 'tracker_cal' as the field name inside $pull to delete the matching workout
-    await Users.collection.findOneAndUpdate(
-      filter,
-      { $pull: { workouts: { tracker_cal: workoutCals } } },
-      { new: true }
-    );
-
-    const updatedUser = await Users.collection.findOne(filter);
-    res.render('workoutLog', { title: 'workoutLog', user: updatedUser });
+    const updatedUser = await Users.findOne(filter).lean(); // Use lean() for the updated user object
+    res.render('workoutLog', {
+      title: 'workoutLog',
+      user: {
+        ...updatedUser,
+        workouts: updatedUser.workouts.map((workout) => ({
+          ...workout,
+          tracker_date: workout.tracker_date.toLocaleDateString(), // Format the date here
+        })),
+      },
+    });
   } catch (error) {
     console.log(error);
   }
-})
+});
 
 // change user weight
 router.post('/adjustWeight', async (req,res) =>{
