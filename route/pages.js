@@ -118,7 +118,7 @@ router.get('/deleteWorkout', async (req, res) => {
     const filter = { email: req.query.email };
     const workoutIndexToDelete = parseInt(req.query.index); // Get the index from the query parameter
 
-    const user = await Users.findOne(filter).lean();
+    var user = await Users.findOne(filter).lean();
 
 
     // Ensure the user and workouts array exist and the index is valid
@@ -145,7 +145,8 @@ router.get('/deleteWorkout', async (req, res) => {
       },
     });
 
-    res.render('workoutLog', { title: 'workoutLog', user: formattedUser });
+    user = await Users.findOne(filter).lean();
+    res.render('workoutLog', { title: 'workoutLog', user });
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal Server Error');
