@@ -92,6 +92,8 @@ router.post('/addWorkout', async (req,res)=>{
     // call function and set result
     let cals = caloriesBurned();
     // add new info for workout
+    console.log(req.body.tracker_date);
+
     await Users.collection.findOneAndUpdate(filter,{ $push:{
       'workouts': {
         tracker_date: req.body.tracker_date,
@@ -116,16 +118,21 @@ router.get('/deleteWorkout', async (req, res) => {
     const filter = { email: req.query.email };
     const workoutIndexToDelete = parseInt(req.query.index); // Get the index from the query parameter
 
-    const user = await Users.findOne(filter).lean(); // Use lean() to get the plain JavaScript object
+    const user = await Users.findOne(filter).lean();
 
-    // Use the array splice method to remove the workout at the specified index
-    if (workoutIndexToDelete >= 0 && workoutIndexToDelete < user.workouts.length) {
+
+    // Ensure the user and workouts array exist and the index is valid
+    if (user && user.workouts && workoutIndexToDelete >= 0 && workoutIndexToDelete < user.workouts.length) {
+      // Remove the workout at the specified index using the splice method
       user.workouts.splice(workoutIndexToDelete, 1);
-      await Users.findOneAndUpdate(filter, { workouts: user.workouts }, { new: true }); // Update workouts array
+
+      // Update the workouts array in the database
+      await Users.findOneAndUpdate(filter, { workouts: user.workouts }, { new: true });
     } else {
       console.log('Invalid workout index.');
     }
 
+    // Get the updated user and render the workoutLog page with the updated user
     const updatedUser = await Users.findOne(filter).lean(); // Use lean() for the updated user object
     res.render('workoutLog', {
       title: 'workoutLog',
@@ -137,8 +144,11 @@ router.get('/deleteWorkout', async (req, res) => {
         })),
       },
     });
+
+    res.render('workoutLog', { title: 'workoutLog', user: formattedUser });
   } catch (error) {
     console.log(error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
