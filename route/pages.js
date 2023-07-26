@@ -216,7 +216,7 @@ router.post('/createUsers',(req,res)=>{
   });
   Users.collection.insertOne(user)
   .then(result =>{
-    res.render('workoutLog',{title: 'workoutLog',user});  
+    res.render('workoutLog',{title: 'workoutLog',user});  /////////////
   })
   .catch(err => console.log(err));
 });
