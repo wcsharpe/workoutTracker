@@ -8,7 +8,9 @@ var workoutSchema = new mongoose.Schema ({
   //   index: true,
   //   required: true,
   // },
-  tracker_date: Date,
+  
+  // tracker_date: Date,
+  tracker_date: String,
   tracker_workout_type: String,
   tracker_duration: Number,
   tracker_intensity: String,

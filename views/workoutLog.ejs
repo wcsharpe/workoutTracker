@@ -30,23 +30,29 @@
             </tr>
           </thead>
           <tbody class="tracker_entries">
-              <% if(user && user.workouts && user.workouts.length > 0) { %>
-              <% user.workouts.forEach(function(workout, index) {  %>
-            <tr class="tracker_row">
-              <td><%- workout.tracker_date %></td>
-              <td><%- workout.tracker_workout_type %></td>
-              <td><%- workout.tracker_duration %></td>
-              <td><%- workout.tracker_intensity %></td>
-              <td><%- workout.tracker_cal %></td>
-              <td><a class="text-decoration-none" href="/deleteWorkout?email=<%- user.email %>&index=<%- index %>"><button type="button" class="tracker_delete">&times;</button></a></td>
-            </tr>
+            <% if (user && user.workouts && user.workouts.length > 0) { %>
+              <% user.workouts.forEach(function (workout, index) { %>
+                <tr class="tracker_row">
+                  <td><%- workout.tracker_date %></td>
+                  <td><%- workout.tracker_workout_type %></td>
+                  <td><%- workout.tracker_duration %></td>
+                  <td><%- workout.tracker_intensity %></td>
+                  <td><%- workout.tracker_cal %></td>
+                  <td>
+                    <% if (workout._id) { %>
+                      <a class="text-decoration-none" href="/deleteWorkout?workoutId=<%- workout._id.toString() %>&email=<%- user.email %>">
+                        <button type="button" class="tracker_delete">&times;</button>
+                      </a>
+                    <% } %>
+                  </td>
+                </tr>
               <% }) %>
-              <% } else { %>
+            <% } else { %>
               <tr class="tracker_row">
                 <td colspan="6">No workouts found.</td>
               </tr>
             <% } %>
-          </tbody>
+          </tbody>  
             <tr class="tracker_row">
               <td>
                 <input type="date" class="tracker_date" name="tracker_date">
