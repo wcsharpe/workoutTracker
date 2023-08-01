@@ -41,7 +41,6 @@ router.post('/addWorkout', async (req,res)=>{
       var workoutIntensity = req.body.tracker_intensity;
       var duration = parseInt(req.body.tracker_duration);
 
-      // level of intesity for activity
       switch(workoutIntensity){
         case 'light':
           intensityScore = 1;
@@ -53,7 +52,6 @@ router.post('/addWorkout', async (req,res)=>{
           intensityScore = 1.50;
           break;
       }
-      // the workout activity the user did
       switch(workoutType){
         case 'walking':
           workoutScore = 2;
@@ -95,10 +93,12 @@ router.post('/addWorkout', async (req,res)=>{
     }
     // call function and set result
     let cals = caloriesBurned();
+    // add new info for workout
+    // console.log(req.body.tracker_date);
     
     // used to create the unique ids for each workout
     const newWorkoutId = new mongoose.Types.ObjectId();
-    // add new info for workout
+
     await Users.collection.findOneAndUpdate(filter,{ $push:{
       'workouts': {
         _id: newWorkoutId,
@@ -118,16 +118,70 @@ router.post('/addWorkout', async (req,res)=>{
   }
 });
 
+// // delete a workout
+// router.get('/deleteWorkout', async (req, res) => {
+//   try {
+//     const filter = { email: req.query.email };
+//     const workoutIndexToDelete = parseInt(req.query.index); // Get the index from the query parameter
+
+//     var user = await Users.findOne(filter).lean();
+
+
+//     // Ensure the user and workouts array exist and the index is valid
+//     if (user && user.workouts && workoutIndexToDelete >= 0 && workoutIndexToDelete < user.workouts.length) {
+//       // Remove the workout at the specified index using the splice method
+//       user.workouts.splice(workoutIndexToDelete, 1);
+
+//       // Update the workouts array in the database
+//       await Users.findOneAndUpdate(filter, { workouts: user.workouts }, { new: true });
+//     } else {
+//       console.log('Invalid workout index.');
+//     }
+
+//     // Get the updated user and render the workoutLog page with the updated user
+//     const updatedUser = await Users.findOne(filter).lean(); // Use lean() for the updated user object
+//     res.render('workoutLog', {
+//       title: 'workoutLog',
+//       user: {
+//         ...updatedUser,
+//         workouts: updatedUser.workouts.map((workout) => ({
+//           ...workout,
+//           // tracker_date: workout.tracker_date.toLocaleDateString(), // Format the date here
+//           tracker_date: workout.tracker_date, // Format the date here
+
+//         })),
+//       },
+//     });
+
+//     user = await Users.findOne(filter).lean();
+//     res.render('workoutLog', { title: 'workoutLog', user });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
+
 // delete a workout
 router.get('/deleteWorkout', async (req, res) => {
   try {
-    // get the email and workout id from the query
     const email = req.query.email;
     const workoutIdToDelete = req.query.workoutId;
 
+    // console.log('Delete Workout Request Received:');
+    // console.log('Email:', email);
+    // console.log('Workout ID to Delete:', workoutIdToDelete);
+
+    // Ensure you have proper validation and security measures here if needed
+
     const filter = { email: email };
 
-    // find and delete the workout
+    // const result = await Users.findOneAndUpdate(
+    //   filter,
+    //   { $pull: { workouts: { _id: workoutIdToDelete } } },
+    //   { new: true }
+    // );
+
+
     await Users.findOneAndUpdate(
       filter,
       { $pull: { workouts: { _id: workoutIdToDelete } } },
@@ -158,6 +212,8 @@ router.post('/adjustWeight', async (req,res) =>{
     console.log(error);
   }
 });
+
+
 
 // get contact page
 router.get('/contact', (req,res)=>{
