@@ -94,7 +94,6 @@ router.post('/addWorkout', async (req,res)=>{
     // call function and set result
     let cals = caloriesBurned();
     // add new info for workout
-    // console.log(req.body.tracker_date);
     
     // used to create the unique ids for each workout
     const newWorkoutId = new mongoose.Types.ObjectId();
@@ -118,69 +117,13 @@ router.post('/addWorkout', async (req,res)=>{
   }
 });
 
-// // delete a workout
-// router.get('/deleteWorkout', async (req, res) => {
-//   try {
-//     const filter = { email: req.query.email };
-//     const workoutIndexToDelete = parseInt(req.query.index); // Get the index from the query parameter
-
-//     var user = await Users.findOne(filter).lean();
-
-
-//     // Ensure the user and workouts array exist and the index is valid
-//     if (user && user.workouts && workoutIndexToDelete >= 0 && workoutIndexToDelete < user.workouts.length) {
-//       // Remove the workout at the specified index using the splice method
-//       user.workouts.splice(workoutIndexToDelete, 1);
-
-//       // Update the workouts array in the database
-//       await Users.findOneAndUpdate(filter, { workouts: user.workouts }, { new: true });
-//     } else {
-//       console.log('Invalid workout index.');
-//     }
-
-//     // Get the updated user and render the workoutLog page with the updated user
-//     const updatedUser = await Users.findOne(filter).lean(); // Use lean() for the updated user object
-//     res.render('workoutLog', {
-//       title: 'workoutLog',
-//       user: {
-//         ...updatedUser,
-//         workouts: updatedUser.workouts.map((workout) => ({
-//           ...workout,
-//           // tracker_date: workout.tracker_date.toLocaleDateString(), // Format the date here
-//           tracker_date: workout.tracker_date, // Format the date here
-
-//         })),
-//       },
-//     });
-
-//     user = await Users.findOne(filter).lean();
-//     res.render('workoutLog', { title: 'workoutLog', user });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
 // delete a workout
 router.get('/deleteWorkout', async (req, res) => {
   try {
     const email = req.query.email;
     const workoutIdToDelete = req.query.workoutId;
 
-    // console.log('Delete Workout Request Received:');
-    // console.log('Email:', email);
-    // console.log('Workout ID to Delete:', workoutIdToDelete);
-
-    // Ensure you have proper validation and security measures here if needed
-
     const filter = { email: email };
-
-    // const result = await Users.findOneAndUpdate(
-    //   filter,
-    //   { $pull: { workouts: { _id: workoutIdToDelete } } },
-    //   { new: true }
-    // );
-
 
     await Users.findOneAndUpdate(
       filter,
